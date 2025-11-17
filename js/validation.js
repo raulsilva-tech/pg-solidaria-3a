@@ -1,151 +1,185 @@
-// Função de validação de CPF (simples, apenas para demonstração de JS avançado)
+
 function isValidCPF(cpf) {
     cpf = cpf.replace(/[^\d]+/g, '');
     if (cpf.length !== 11 || !!cpf.match(/(\d)\1{10}/)) return false;
+
     let sum = 0;
     let remainder;
-    for (let i = 1; i <= 9; i++) sum = sum + parseInt(cpf.substring(i - 1, i)) * (11 - i);
+
+    for (let i = 1; i <= 9; i++) {
+        sum = sum + parseInt(cpf.substring(i - 1, i)) * (11 - i);
+    }
     remainder = (sum * 10) % 11;
     if ((remainder === 10) || (remainder === 11)) remainder = 0;
     if (remainder !== parseInt(cpf.substring(9, 10))) return false;
+
     sum = 0;
-    for (let i = 1; i <= 10; i++) sum = sum + parseInt(cpf.substring(i - 1, i)) * (12 - i);
+    for (let i = 1; i <= 10; i++) {
+        sum = sum + parseInt(cpf.substring(i - 1, i)) * (12 - i);
+    }
     remainder = (sum * 10) % 11;
     if ((remainder === 10) || (remainder === 11)) remainder = 0;
     if (remainder !== parseInt(cpf.substring(10, 11))) return false;
+
     return true;
 }
 
-// Função para exibir feedback de erro
+
 function showFeedback(inputElement, message) {
-    // Remove feedback anterior
     let feedback = inputElement.nextElementSibling;
     if (feedback && feedback.classList.contains('invalid-feedback')) {
         feedback.remove();
     }
 
-    // Adiciona novo feedback
     feedback = document.createElement('div');
     feedback.className = 'invalid-feedback';
     feedback.textContent = message;
-    inputElement.parentNode.insertBefore(feedback, inputElement.nextSibling);
+    inputElement.parentNode.insertBefore(feedback, inputElement.nextSibling); 
+    
     inputElement.classList.add('is-invalid');
     inputElement.classList.remove('is-valid');
 }
 
-// Função para remover feedback de erro
+
 function removeFeedback(inputElement) {
     let feedback = inputElement.nextElementSibling;
     if (feedback && feedback.classList.contains('invalid-feedback')) {
         feedback.remove();
     }
     inputElement.classList.remove('is-invalid');
-    inputElement.classList.add('is-valid');
+    inputElement.classList.remove('is-valid');
 }
 
-// Função de validação principal
+
 function validateForm(form) {
     let isValid = true;
-    const inputs = form.querySelectorAll('input[required], select[required], textarea[required]');
+    const inputs = form.querySelectorAll('input[required], textarea[required]');
 
     inputs.forEach(input => {
-        removeFeedback(input); // Limpa feedback anterior
+        removeFeedback(input); 
+        let fieldIsValid = true;
+        const digitsOnly = input.value.replace(/\D/g, ''); // Pega apenas os dígitos
 
-        if (!input.checkValidity()) {
-            isValid = false;
-            showFeedback(input, input.validationMessage || 'Campo obrigatório ou formato incorreto.');
-        } else if (input.id === 'cpf') {
-            const cpfValue = input.value;
-            if (!isValidCPF(cpfValue)) {
+        //cpf
+        if (input.id === 'cpf') {
+            if (input.required && digitsOnly.length === 0) {
                 isValid = false;
+                fieldIsValid = false;
+                showFeedback(input, 'O CPF é obrigatório.');
+            } else if (digitsOnly.length > 0 && digitsOnly.length < 11) {
+                isValid = false;
+                fieldIsValid = false;
+                showFeedback(input, 'CPF incompleto. Deve ter 11 dígitos.');
+            } else if (digitsOnly.length === 11 && !isValidCPF(digitsOnly)) {
+                isValid = false;
+                fieldIsValid = false;
                 showFeedback(input, 'CPF inválido. Verifique o número.');
             }
+        } 
+        //telefone
+        else if (input.id === 'telefone') {
+            if (input.required && digitsOnly.length === 0) {
+                isValid = false;
+                fieldIsValid = false;
+                showFeedback(input, 'O Telefone é obrigatório.');
+            } else if (digitsOnly.length > 0 && (digitsOnly.length < 10)) {
+                isValid = false;
+                fieldIsValid = false;
+                showFeedback(input, 'Telefone incompleto. Deve ter 10 ou 11 dígitos.');
+            }
         }
-        // Adicionar outras validações avançadas aqui (ex: data de nascimento, email, etc.)
+       
+        else if (!input.checkValidity()) {
+            isValid = false;
+            fieldIsValid = false;
+            showFeedback(input, input.validationMessage || 'Campo obrigatório ou formato incorreto.');
+        }
+
+        if (fieldIsValid) {
+            input.classList.add('is-valid');
+        }
     });
 
     return isValid;
 }
 
-// Função para aplicar máscaras (integrada do mask.js)
-function applyMasks() {
-    const cpfInput = document.getElementById('cpf');
-    const telefoneInput = document.getElementById('telefone');
-    const cepInput = document.getElementById('cep');
 
-    // Função genérica para aplicar máscara
-    function applyMask(input, maskPattern) {
-        if (!input) return;
-        input.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, ''); // Remove tudo que não é dígito
-            let maskedValue = '';
-            let k = 0;
-
-            for (let i = 0; i < maskPattern.length; i++) {
-                if (k >= value.length) break;
-
-                if (maskPattern[i] === '#') {
-                    maskedValue += value[k++];
-                } else {
-                    maskedValue += maskPattern[i];
-                }
-            }
-            e.target.value = maskedValue;
-        });
-    }
-
+//mascaras
+document.addEventListener('input', function(e) {
+    
     // Máscara para CPF: ###.###.###-##
-    applyMask(cpfInput, '###.###.###-##');
+    if (e.target.id === 'cpf') {
+        let value = e.target.value.replace(/\D/g, ''); 
+        let maskedValue = '';
+        let k = 0;
+        const maskPattern = '###.###.###-##';
 
-    // Máscara para CEP: #####-###
-    applyMask(cepInput, '#####-###');
-
-    // Máscara para Telefone: (##) #####-#### (para 9 dígitos) ou (##) ####-#### (para 8 dígitos)
-    if (telefoneInput) {
-        telefoneInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            let mask = '';
-
-            if (value.length > 10) {
-                // Celular com 9 dígitos: (##) #####-####
-                mask = '(##) #####-####';
+        for (let i = 0; i < maskPattern.length; i++) {
+            if (k >= value.length) break;
+            if (maskPattern[i] === '#') {
+                maskedValue += value[k++];
             } else {
-                // Fixo ou celular antigo com 8 dígitos: (##) ####-####
-                mask = '(##) ####-####';
+                maskedValue += maskPattern[i];
             }
-
-            let maskedValue = '';
-            let k = 0;
-
-            for (let i = 0; i < mask.length; i++) {
-                if (k >= value.length) break;
-
-                if (mask[i] === '#') {
-                    maskedValue += value[k++];
-                } else {
-                    maskedValue += mask[i];
-                }
-            }
-            e.target.value = maskedValue;
-        });
+        }
+        e.target.value = maskedValue;
     }
-}
 
-// Listener para o formulário de cadastro (quando carregado pelo SPA)
-document.addEventListener('DOMContentLoaded', function() {
-    // A lógica de máscara será chamada no spa.js após a renderização
+    // Máscara dinâmica para Telefone: (##) #####-#### ou (##) ####-####
+    if (e.target.id === 'telefone') {
+        let value = e.target.value.replace(/\D/g, '');
+        let mask = (value.length > 10) ? '(##) #####-####' : '(##) ####-####';
+        
+        let maskedValue = '';
+        let k = 0;
+        for (let i = 0; i < mask.length; i++) {
+            if (k >= value.length) break;
+            if (mask[i] === '#') {
+                maskedValue += value[k++];
+            } else {
+                maskedValue += mask[i];
+            }
+        }
+        e.target.value = maskedValue;
+    }
 });
 
-// Listener para o formulário de cadastro (quando carregado pelo SPA)
+
+
 document.addEventListener('submit', function(e) {
-    const form = e.target.closest('#cadastro-form');
+    const form = e.target.closest('#cadastro-form'); 
     if (form) {
-        e.preventDefault();
+        e.preventDefault(); 
+        
+        const msgDiv = document.getElementById('cadastro-msg');
+        if(msgDiv) {
+            msgDiv.textContent = '';
+        }
+
         if (validateForm(form)) {
-            alert('Formulário validado com sucesso! (Simulação de envio)');
-            form.reset();
+        
+            const formData = new FormData(form);
+            const nome = formData.get('nome') || 'Voluntário(a)';
+
+            alert('Formulário validado com sucesso!');
+            if(msgDiv) {
+                msgDiv.textContent = 'Obrigado(a), ' + nome + '! Cadastro enviado com sucesso.';
+                msgDiv.style.color = 'green';
+            }
+            
+            form.reset(); 
+            form.querySelectorAll('.is-valid, .is-invalid').forEach(el => {
+                el.classList.remove('is-valid', 'is-invalid');
+            });
+            const allFeedbacks = form.querySelectorAll('.invalid-feedback');
+            allFeedbacks.forEach(fb => fb.remove());
+
         } else {
             alert('Por favor, corrija os erros no formulário.');
+             if(msgDiv) {
+                msgDiv.textContent = 'Formulário com erros. Verifique os campos em vermelho.';
+                msgDiv.style.color = 'red';
+            }
         }
     }
 });

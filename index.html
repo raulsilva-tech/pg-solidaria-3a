@@ -23,7 +23,7 @@
   </header>
 
   <main id="app" class="container">
-    <!-- O conteúdo inicial (home) -->
+  
     <section id="home-view">
       <h2>Bem-vindo à ONG Praia Grande Solidária</h2>
       <p>Conheça nossa missão e ações na comunidade.</p>
@@ -35,9 +35,9 @@
     <p>&copy; 2025 ONG Praia Grande Solidária. Todos os direitos reservados.</p>
   </footer>
 
-  <!-- Templates embutidos para evitar fetchs e problemas com file:/// -->
+
   <template id="tpl-projetos">
-    <!-- Conteúdo do template de projetos (pode ser substituído pelo arquivo projetos_template.html) -->
+   
     <section>
       <h2>Projetos em Destaque</h2>
       <div class="projetos-grid">
@@ -62,14 +62,16 @@
         <label>Nome: <input type="text" name="nome" required></label>
         <label>Email: <input name="email" type="email" required></label>
         
-        <label for="cpf">CPF:</label> <input type="text" id="cpf" name="cpf" required pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" title="Formato: 000.000.000-00">
+        <label for="cpf">CPF:</label>
+    <input type="text" id="cpf" name="cpf" required 
+           title="Formato: 000.000.000-00">
+    <label for="telefone">Telefone:</label>
+    <input type="tel" id="telefone" name="telefone" required 
+           title="Formato: (00) 00000-0000 ou (00) 0000-0000">
+    <label for="dataNascimento">Data de Nascimento:</label>
+    <input type="date" id="dataNascimento" name="dataNascimento" required>
 
-        <label for="telefone">Telefone:</label> <input type="tel" id="telefone" name="telefone" required pattern="\(\d{2}\) \d{4,5}-\d{4}" title="Formato: (00) 00000-0000 ou (00) 0000-0000">
-
-        <label for="dataNascimento">Data de Nascimento:</label><input type="date" id="dataNascimento" name="dataNascimento" required>
-       
-
-        <button type="submit">Enviar</button>
+        <button type="submit" class="btn btn-primary">Enviar</button>
       </form>
       <div id="cadastro-msg" aria-live="polite"></div>
     </section>
@@ -83,7 +85,7 @@
     </section>
   </template>
 
-  <!-- Scripts: primeiro o app (router), depois os módulos existentes -->
+ 
   <script src="js/app.js"></script>
   <script src="js/validation.js"></script>
   <script src="js/menu.js"></script>

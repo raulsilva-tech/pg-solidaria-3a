@@ -1,32 +1,29 @@
-/* ==========================================================================
-   Sistema de Design (Design System)
-   ========================================================================== */
 
-/* 1. Cores (Paleta de 8+ cores) - Alto Contraste Garantido */
+
 :root {
-    /* Primárias (Foco em Ação e Marca) */
+    
     --cor-primaria-base: #0056b3; /* Azul Escuro para melhor contraste */
     --cor-primaria-clara: #e6f0ff; /* Fundo claro para contraste */
     --cor-primaria-escura: #004085; /* Hover/Active */
 
-    /* Secundárias (Foco em Sucesso e Destaque) */
+    
     --cor-secundaria-base: #1e7e34; /* Verde Escuro */
     --cor-secundaria-clara: #e9f7ec;
     --cor-secundaria-escura: #155724;
 
-    /* Neutras (Fundo e Texto) */
+ 
     --cor-neutra-fundo: #f8f9fa; /* Cinza claro - Fundo principal */
     --cor-neutra-texto: #212529; /* Preto quase total - Alto contraste com fundos claros */
     --cor-neutra-borda: #ced4da;
     --cor-neutra-clara: #ffffff; /* Branco */
 
-    /* Feedback/Contraste */
+
     --cor-sucesso: var(--cor-secundaria-base);
     --cor-alerta: #ffc107; /* Amarelo - Usar texto escuro */
     --cor-erro: #dc3545; /* Vermelho */
     --cor-info: #17a2b8; /* Ciano */
 
-    /* 2. Tipografia (5+ tamanhos de fonte) */
+   
     --fonte-principal: 'Arial', sans-serif;
     --tamanho-h1: 2.5rem; /* 40px */
     --tamanho-h2: 2rem;   /* 32px */
@@ -35,7 +32,7 @@
     --tamanho-p-base: 1rem; /* 16px */
     --tamanho-p-pequeno: 0.875rem; /* 14px */
 
-    /* 3. Espaçamento Modular (8px, 16px, 24px, 32px, 48px, 64px) */
+  
     --espaco-xs: 0.5rem;  /* 8px */
     --espaco-sm: 1rem;    /* 16px */
     --espaco-md: 1.5rem;  /* 24px */
@@ -43,7 +40,7 @@
     --espaco-xl: 3rem;    /* 48px */
     --espaco-xxl: 4rem;   /* 64px */
 
-    /* 4. Breakpoints (5+ breakpoints) */
+ 
     --bp-xs: 320px;
     --bp-sm: 576px;
     --bp-md: 768px;
@@ -51,9 +48,6 @@
     --bp-xl: 1200px;
 }
 
-/* ==========================================================================
-   Estilos Globais e Reset
-   ========================================================================== */
 
 * {
     margin: 0;
@@ -69,7 +63,7 @@ body {
     padding-top: 5rem; /* Espaço para o header fixo */
 }
 
-/* Tipografia */
+
 h1, h2, h3, h4, h5, h6 {
     color: var(--cor-primaria-escura);
     line-height: 1.2;
@@ -85,7 +79,7 @@ p {
     margin-bottom: var(--espaco-sm);
 }
 
-/* Links */
+
 a {
     color: var(--cor-primaria-base);
     text-decoration: none;
@@ -97,9 +91,6 @@ a:hover, a:focus {
     text-decoration: underline;
 }
 
-/* ==========================================================================
-   Header e Navegação
-   ========================================================================== */
 
 header {
     background-color: var(--cor-neutra-clara);
@@ -142,9 +133,6 @@ header h1 {
     text-decoration: none;
 }
 
-/* ==========================================================================
-   Layouts Responsivos (Grid e Flexbox)
-   ========================================================================== */
 
 .container {
     max-width: 1200px;
@@ -171,7 +159,6 @@ section h2 {
     padding-bottom: var(--espaco-xs);
 }
 
-/* Grid de 12 Colunas */
 .grid-12-col {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
@@ -188,7 +175,7 @@ section h2 {
     gap: var(--espaco-lg);
 }
 
-/* Imagens */
+
 figure {
     margin: var(--espaco-sm) 0;
 }
@@ -206,9 +193,6 @@ figcaption {
     margin-top: var(--espaco-xs);
 }
 
-/* ==========================================================================
-   Footer
-   ========================================================================== */
 
 footer {
     text-align: center;
@@ -218,9 +202,6 @@ footer {
     margin-top: var(--espaco-lg);
 }
 
-/* ==========================================================================
-   Componentes de Interface
-   ========================================================================== */
 
 /* Botões */
 .btn {
@@ -266,7 +247,7 @@ footer {
     cursor: not-allowed;
 }
 
-/* Cards */
+
 .card {
     background-color: var(--cor-neutra-clara);
     border: 1px solid var(--cor-neutra-borda);
@@ -294,7 +275,7 @@ footer {
     object-fit: cover;
 }
 
-/* Formulários */
+
 form fieldset {
     border: 1px solid var(--cor-neutra-borda);
     padding: var(--espaco-md);
@@ -353,7 +334,7 @@ input:valid:not(:placeholder-shown) {
     display: block;
 }
 
-/* Badges/Tags */
+
 .badge {
     display: inline-block;
     padding: 0.3em 0.5em;
@@ -377,7 +358,7 @@ input:valid:not(:placeholder-shown) {
     background-color: var(--cor-secundaria-base);
 }
 
-/* Alerts */
+
 .alert {
     padding: var(--espaco-sm);
     margin-bottom: var(--espaco-lg);
@@ -459,11 +440,7 @@ input:valid:not(:placeholder-shown) {
     color: var(--cor-primaria-escura);
 }
 
-/* ==========================================================================
-   Responsividade (Mobile-First)
-   ========================================================================== */
 
-/* Mobile (até 991px) */
 @media (max-width: 991.98px) {
     .menu-toggle { display: block; }
     .main-nav { display: none; }
