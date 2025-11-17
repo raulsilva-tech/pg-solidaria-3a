@@ -60,6 +60,13 @@ function validateForm(form) {
         let fieldIsValid = true;
         const digitsOnly = input.value.replace(/\D/g, ''); // Pega apenas os dígitos
 
+        const today = new Date();
+        const minAgeDate = new Date(
+        today.getFullYear() - 18, 
+        today.getMonth(), 
+        today.getDate()
+    );
+
         //cpf
         if (input.id === 'cpf') {
             if (input.required && digitsOnly.length === 0) {
@@ -88,8 +95,22 @@ function validateForm(form) {
                 showFeedback(input, 'Telefone incompleto. Deve ter 10 ou 11 dígitos.');
             }
         }
+        // Validação de idade
+        else if (input.id === 'dataNascimento') {
+            const birthDate = new Date(input.value);
+            
+            // Verifica se a data foi preenchida (obrigatório) e se é menor de 18 anos
+            if (input.required && !input.value) {
+                isValid = false;
+                fieldIsValid = false;
+                showFeedback(input, 'A Data de Nascimento é obrigatória.');
+            } else if (birthDate > minAgeDate) {
+                isValid = false;
+                fieldIsValid = false;
+                showFeedback(input, 'Você deve ter 18 anos ou mais para se cadastrar.');
+            }
        
-        else if (!input.checkValidity()) {
+        }else if (!input.checkValidity()) {
             isValid = false;
             fieldIsValid = false;
             showFeedback(input, input.validationMessage || 'Campo obrigatório ou formato incorreto.');
